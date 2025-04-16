@@ -6,22 +6,28 @@ const cart = [
 
 function calculateTotal(cartItems) {
   let total = 0;
-  for (let i = 0; i <= cartItems.length; i++) { // Bug: <= should be <
-      total += cartItems[i].price; // Bug: cartItems[i] is undefined on the last iteration
+  for (let i = 0; i < cartItems.length; i++) { // changed to < because .length gives last index +1
+      total += cartItems[i].price; 
   }
   return total;
 }
 
 function applyDiscount(total, discountRate) {
-  return total - total * discountRate; // Bug: Missing validation for discountRate
+  if (discountRate >= 1 || discountRate < .01){ // validates discountRate and returns original total if not valid
+    console.log("Discount must be in decimal format of tenths and/or hundredths");
+    console.log("Discount not applied.")
+    return total;
+  } else {
+    return total - total * discountRate; 
+  }
 }
 
 function generateReceipt(cartItems, total) {
-  let receipt = "Items:\n";
+  let receipt = "Items: \n";
   cartItems.forEach(item => {
-      receipt += `${item.name}: $${item.price}\n`;
+      receipt += `${item.name}: $${item.price} \n`;
   });
-  receipt += `Total: $${total.toFixed(2)}`; // Bug: total may not be a number
+  receipt += `Total: $${parseFloat(total.toFixed(2))}`; // Bug: total may not be a number || I made it back to integer with parseFloat
   return receipt;
 }
 
